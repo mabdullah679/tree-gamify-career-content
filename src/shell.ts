@@ -13,25 +13,27 @@ export function renderShell(activePage: PageKey): { content: HTMLElement; destro
 
   container.innerHTML = `
     <div class="app-container">
-      <div class="user-hud">
-        <button class="stats-btn" id="stats-btn">
-          <span class="stats-icon">📊</span>
-          <div class="user-level">
-            <div class="level-text">Level <span id="user-level">1</span></div>
-            <div class="xp-bar-mini">
-              <div class="xp-fill-mini" id="xp-fill"></div>
+      <header class="topbar">
+        <nav class="nav">
+          <a data-route-path="/timeline/" href="/timeline/" class="${activePage === 'timeline' ? 'active' : ''}">Story Timeline</a>
+          <a data-route-path="/tree/" href="/tree/" class="${activePage === 'tree' ? 'active' : ''}">Exploration Tree</a>
+          <a data-route-path="/achievements/" href="/achievements/" class="achievements-btn ${activePage === 'achievements' ? 'active' : ''}">
+            Achievements <span class="achievement-badge" id="achievement-count">0</span>
+          </a>
+        </nav>
+        <div class="user-hud">
+          <button class="stats-btn" id="stats-btn">
+          <span class="stats-icon">LVL</span>
+            <div class="user-level">
+              <div class="level-text">Level <span id="user-level">1</span></div>
+              <div class="xp-bar-mini">
+                <div class="xp-fill-mini" id="xp-fill"></div>
+              </div>
             </div>
-          </div>
-        </button>
-        <button class="reset-hud-btn" id="reset-hud-btn" type="button">Reset Progress</button>
-      </div>
-      <nav class="nav">
-        <a data-route-path="/timeline/" href="/timeline/" class="${activePage === 'timeline' ? 'active' : ''}">Story Timeline</a>
-        <a data-route-path="/tree/" href="/tree/" class="${activePage === 'tree' ? 'active' : ''}">Exploration Tree</a>
-        <a data-route-path="/achievements/" href="/achievements/" class="achievements-btn ${activePage === 'achievements' ? 'active' : ''}">
-          Achievements <span class="achievement-badge" id="achievement-count">0</span>
-        </a>
-      </nav>
+          </button>
+          <button class="reset-hud-btn" id="reset-hud-btn" type="button">Reset Progress</button>
+        </div>
+      </header>
       <div id="page-content"></div>
     </div>
   `;
