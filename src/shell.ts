@@ -1,7 +1,9 @@
 import './style.css';
 import { achievementStore } from './data/achievementStore';
+import { resetLocalProgress } from './data/resetProgress';
 import { celebrationEffect } from './components/CelebrationEffect';
 import { statsOverlay } from './components/StatsOverlay';
+import { toast } from './components/Toast';
 
 export type PageKey = 'timeline' | 'tree' | 'achievements';
 
@@ -21,6 +23,7 @@ export function renderShell(activePage: PageKey): { content: HTMLElement; destro
             </div>
           </div>
         </button>
+        <button class="reset-hud-btn" id="reset-hud-btn" type="button">Reset Progress</button>
       </div>
       <nav class="nav">
         <a data-route-path="/timeline/" href="/timeline/" class="${activePage === 'timeline' ? 'active' : ''}">Story Timeline</a>
@@ -60,6 +63,16 @@ export function renderShell(activePage: PageKey): { content: HTMLElement; destro
   const statsHandler = () => statsOverlay.toggle();
   statsBtn?.addEventListener('click', statsHandler);
 
+  const resetBtn = container.querySelector<HTMLButtonElement>('#reset-hud-btn');
+  const resetHandler = () => {
+    const confirmed = window.confirm('Reset all progress and achievements? This cannot be undone.');
+    if (!confirmed) return;
+    resetLocalProgress();
+    toast.show('Progress reset. Starting at level 1 again.', 'success');
+    updateHUD();
+  };
+  resetBtn?.addEventListener('click', resetHandler);
+
   const content = container.querySelector<HTMLDivElement>('#page-content');
   if (!content) throw new Error('Missing page-content container');
 
@@ -68,6 +81,7 @@ export function renderShell(activePage: PageKey): { content: HTMLElement; destro
     destroy: () => {
       unsubAchievements();
       statsBtn?.removeEventListener('click', statsHandler);
+      resetBtn?.removeEventListener('click', resetHandler);
     }
   };
 }

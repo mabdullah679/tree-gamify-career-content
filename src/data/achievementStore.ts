@@ -125,6 +125,22 @@ class AchievementStore {
     };
   }
 
+  reset() {
+    if (this.notifyTimeout !== null) {
+      clearTimeout(this.notifyTimeout);
+      this.notifyTimeout = null;
+    }
+    this.achievements.clear();
+    this.totalXP = 0;
+    this.previousLevel = 1;
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+      console.warn('Failed to clear achievements:', error);
+    }
+    this.notifyListeners(false);
+  }
+
   private calculateLevel(xp: number): number {
     let level = 1;
     while (level < MAX_LEVEL && xp >= this.getLevelXP(level)) {

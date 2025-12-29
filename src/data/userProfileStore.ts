@@ -2,8 +2,10 @@ type UserProfile = {
   fullName: string;
 };
 
+const DEFAULT_USER_PROFILE: UserProfile = { fullName: 'Career Explorer' };
+
 class UserProfileStore {
-  private state: UserProfile = { fullName: 'Career Explorer' };
+  private state: UserProfile = { ...DEFAULT_USER_PROFILE };
   private readonly STORAGE_KEY = 'career-roadmap-user';
 
   constructor() {
@@ -16,6 +18,16 @@ class UserProfileStore {
 
   setProfile(partial: Partial<UserProfile>) {
     this.state = { ...this.state, ...partial };
+    this.save();
+  }
+
+  reset() {
+    this.state = { ...DEFAULT_USER_PROFILE };
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+      console.warn('Failed to clear user profile', error);
+    }
     this.save();
   }
 

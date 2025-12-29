@@ -4,12 +4,14 @@ type CourseState = {
   careerPath: string;
 };
 
+const DEFAULT_COURSE_STATE: CourseState = {
+  courseId: 'electrical-lineworker',
+  courseName: 'Electrical Lineworker Mastery',
+  careerPath: 'Electrical Lineworker'
+};
+
 class CourseStore {
-  private state: CourseState = {
-    courseId: 'electrical-lineworker',
-    courseName: 'Electrical Lineworker Mastery',
-    careerPath: 'Electrical Lineworker'
-  };
+  private state: CourseState = { ...DEFAULT_COURSE_STATE };
   private readonly STORAGE_KEY = 'career-roadmap-course';
 
   constructor() {
@@ -22,6 +24,16 @@ class CourseStore {
 
   setCourse(partial: Partial<CourseState>) {
     this.state = { ...this.state, ...partial };
+    this.save();
+  }
+
+  reset() {
+    this.state = { ...DEFAULT_COURSE_STATE };
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+      console.warn('Failed to clear course info', error);
+    }
     this.save();
   }
 

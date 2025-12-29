@@ -184,6 +184,23 @@ class ProgressStore {
     return () => this.listeners.delete(listener);
   }
 
+  reset() {
+    this.currentStage = 0;
+    this.exploration.forEach((progress) => {
+      progress.exploredSkills.clear();
+      progress.exploredCertifications.clear();
+      progress.awardedSkills.clear();
+      progress.awardedCertifications.clear();
+      progress.completed = false;
+    });
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+      console.warn('Failed to clear progress:', error);
+    }
+    this.notifyListeners();
+  }
+
   private notifyListeners() {
     this.listeners.forEach(listener => listener());
     this.save();

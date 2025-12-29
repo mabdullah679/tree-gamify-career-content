@@ -1,4 +1,6 @@
 import { achievementStore } from '../data/achievementStore';
+import { resetLocalProgress } from '../data/resetProgress';
+import { toast } from './Toast';
 
 export class StatsOverlay {
   private overlay: HTMLElement;
@@ -116,6 +118,11 @@ export class StatsOverlay {
         </div>
       </div>
 
+      <div class="stats-actions">
+        <button class="reset-progress-btn" id="reset-progress-btn" type="button">Reset Progress</button>
+        <p class="reset-progress-note">Clears local progress for testing so you can start at level 1 again.</p>
+      </div>
+
       <div class="recent-achievements">
         <h3>Recent Achievements</h3>
         <div class="achievement-list">
@@ -131,6 +138,17 @@ export class StatsOverlay {
         </div>
       </div>
     `;
+
+    const resetButton = content.querySelector<HTMLButtonElement>('#reset-progress-btn');
+    if (resetButton) {
+      resetButton.onclick = () => {
+        const confirmed = window.confirm('Reset all progress and achievements? This cannot be undone.');
+        if (!confirmed) return;
+        resetLocalProgress();
+        toast.show('Progress reset. Starting at level 1 again.', 'success');
+        this.render();
+      };
+    }
   }
 
   private getTypeIcon(type: string): string {
