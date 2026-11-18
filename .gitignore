@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# OS / backups
+.DS_Store
+*.bak
+*.backup
+.env
+.env.*
